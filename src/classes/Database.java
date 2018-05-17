@@ -43,8 +43,8 @@ public class Database {
 			System.out.println(entry);
 		}else if(entry instanceof Movie) {
 			platforms.get(platformsInUse.indexOf("Movie")).add((Movie)entry);
-		}else if(entry instanceof SchoolWork) {
-			platforms.get(platformsInUse.indexOf("SchoolWork")).add((SchoolWork)entry);
+		}else if(entry instanceof Task) {
+			platforms.get(platformsInUse.indexOf("Task")).add((Task)entry);
 		}else if(entry instanceof Series) {
 			platforms.get(platformsInUse.indexOf("Series")).add((Series)entry);
 		}
@@ -73,8 +73,8 @@ public class Database {
 			return (Book)entry;
 		}else if(entry instanceof Movie) {
 			return (Movie)entry;
-		}else if(entry instanceof SchoolWork) {
-			return (SchoolWork)entry;
+		}else if(entry instanceof Task) {
+			return (Task)entry;
 		}if(entry instanceof Series) {
 			return (Series)entry;
 		}
@@ -134,8 +134,8 @@ public class Database {
 						printWriter.println(((Book)arr.get(x)).toFile());
 					}else if(arr.get(x) instanceof Movie) {
 						printWriter.println(((Movie)arr.get(x)).toFile());
-					}else if(arr.get(x) instanceof SchoolWork) {
-						printWriter.println(((SchoolWork)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Task) {
+						printWriter.println(((Task)arr.get(x)).toFile());
 					}else if(arr.get(x) instanceof Series) {
 						printWriter.println(((Series)arr.get(x)).toFile());
 					}
@@ -175,8 +175,8 @@ public class Database {
 						platforms.get(platformsInUse.indexOf("Book")).add((Book.read(line)));
 					}else if(platform.equals("Movie")) {
 						platforms.get(platformsInUse.indexOf("Movie")).add((Movie.read(line)));
-					}else if(platform.equals("SchoolWork")) {
-						platforms.get(platformsInUse.indexOf("SchoolWork")).add((SchoolWork.read(line)));
+					}else if(platform.equals("Task")) {
+						platforms.get(platformsInUse.indexOf("Task")).add((Task.read(line)));
 					}else if(platform.equals("Series")) {
 						platforms.get(platformsInUse.indexOf("Series")).add((Series.read(line)));
 					}
@@ -202,7 +202,7 @@ public class Database {
 		System.out.println("IN THIS CONSTRUCTOR");
 		platformsAvailable.add("Book");
 		platformsAvailable.add("Movie");
-		platformsAvailable.add("SchoolWork");
+		platformsAvailable.add("Task");
 		platformsAvailable.add("Series");
 		System.out.println(platformsAvailable.size());
 		
