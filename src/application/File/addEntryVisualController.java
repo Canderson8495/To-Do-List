@@ -8,6 +8,7 @@ import java.util.Date;
 
 import application.Main;
 import classes.Book;
+import classes.Game;
 import classes.Movie;
 import classes.Task;
 import classes.Series;
@@ -39,7 +40,7 @@ public class addEntryVisualController {
 	@FXML private ComboBox priorityBox;
 	ObservableList<String> priorityList = FXCollections.observableArrayList("High", "Medium", "Low");
 	
-	
+	@FXML private TextField genreField;
 	@FXML private TextField	classField;
 	@FXML private DatePicker	dateDueField;
 	@FXML private TextField	episodesField;
@@ -109,7 +110,14 @@ public class addEntryVisualController {
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render Serie's exta values
+				//render Serie's extra values
+			}else if(platformBox.getValue().equals("Game")) {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(Main.class.getResource("File/NewGame.fxml"));
+				loader.setController(this);
+				AnchorPane ex = loader.load();
+				platformField.getChildren().setAll(ex.getChildren());
+				//render Serie's extra values
 			}
 			value = (String)platformBox.getValue();
 		}
@@ -140,6 +148,8 @@ public class addEntryVisualController {
 			Main.db.addEntry(new Task(nameField.getText(), new Date(), priority, descriptionField.getText(), classField.getText(),date));
 		}else if(platformBox.getValue().equals("Series")) {
 			Main.db.addEntry(new Series(nameField.getText(), new Date(), priority, descriptionField.getText(), Integer.parseInt(episodesField.getText()), Integer.parseInt(episodesFinishedField.getText())));
+		}else if(platformBox.getValue().equals("Game")) {
+			Main.db.addEntry(new Game(nameField.getText(), new Date(), priority, descriptionField.getText(), genreField.getText(), Integer.parseInt(lengthField.getText())));
 		}
 		System.out.println("WTF");
 		Main.closeSecondaryStage();

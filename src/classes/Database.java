@@ -47,6 +47,8 @@ public class Database {
 			platforms.get(platformsInUse.indexOf("Task")).add((Task)entry);
 		}else if(entry instanceof Series) {
 			platforms.get(platformsInUse.indexOf("Series")).add((Series)entry);
+		}else if(entry instanceof Game) {
+			platforms.get(platformsInUse.indexOf("Game")).add((Game)entry);
 		}
 	}
 	public ArrayList<Platform> getPlatformList(String platformName) {
@@ -75,8 +77,10 @@ public class Database {
 			return (Movie)entry;
 		}else if(entry instanceof Task) {
 			return (Task)entry;
-		}if(entry instanceof Series) {
+		}else if(entry instanceof Series) {
 			return (Series)entry;
+		}else if(entry instanceof Game) {
+			return (Game)entry;
 		}
 		return entry;
 	}
@@ -138,6 +142,8 @@ public class Database {
 						printWriter.println(((Task)arr.get(x)).toFile());
 					}else if(arr.get(x) instanceof Series) {
 						printWriter.println(((Series)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Game) {
+						printWriter.println(((Game)arr.get(x)).toFile());
 					}
 				}
 		}
@@ -179,6 +185,8 @@ public class Database {
 						platforms.get(platformsInUse.indexOf("Task")).add((Task.read(line)));
 					}else if(platform.equals("Series")) {
 						platforms.get(platformsInUse.indexOf("Series")).add((Series.read(line)));
+					}else if(platform.equals("Game")) {
+						platforms.get(platformsInUse.indexOf("Game")).add((Game.read(line)));
 					}
 				}catch(Exception e){
 					System.out.println("ERROR" + e);
@@ -204,6 +212,7 @@ public class Database {
 		platformsAvailable.add("Movie");
 		platformsAvailable.add("Task");
 		platformsAvailable.add("Series");
+		platformsAvailable.add("Game");
 		System.out.println(platformsAvailable.size());
 		
 	}

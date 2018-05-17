@@ -99,10 +99,6 @@ public class Main extends Application {
 		secondaryStage.show();
 	}
 
-	public Database getDatabase() {
-		return db;
-	}
-
 	public static void closeSecondaryStage() throws IOException {
 		secondaryStage.close();
 		showListVisual();
