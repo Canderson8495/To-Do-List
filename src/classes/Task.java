@@ -5,7 +5,7 @@ import java.util.Date;
 
 import javafx.scene.layout.Pane;
 
-public class SchoolWork extends Platform {
+public class Task extends Platform {
 	private String SchoolClass = "";
 	private Date dueDate = new Date();
 	
@@ -14,7 +14,7 @@ public class SchoolWork extends Platform {
 		return super.toFile() + "|" + SchoolClass + "|" + dueDate.getTime();
 	}
 	
-	public static SchoolWork read(String input) {
+	public static Task read(String input) {
 		ArrayList<String> values = new ArrayList<String>();
 		StringBuffer str = new StringBuffer("");
 		for(int x = 0; x < input.length(); x++) {
@@ -26,7 +26,7 @@ public class SchoolWork extends Platform {
 			}
 		}
 		values.add(str.toString());
-		return new SchoolWork(values.get(0), new Date(Long.parseLong(values.get(1))), Integer.parseInt(values.get(2)), values.get(3), values.get(4), new Date(Long.parseLong(values.get(5))));
+		return new Task(values.get(0), new Date(Long.parseLong(values.get(1))), Integer.parseInt(values.get(2)), values.get(3), values.get(4), new Date(Long.parseLong(values.get(5))));
 	}
 	
 	@Override
@@ -40,11 +40,11 @@ public class SchoolWork extends Platform {
 		return super.getName();
 	}	
 	
-	public SchoolWork() {
+	public Task() {
 		super();
 	}
 
-	public SchoolWork(String name, Date dateCreated, int priority, String description, String schoolClass,
+	public Task(String name, Date dateCreated, int priority, String description, String schoolClass,
 			Date dueDate) {
 		super(name, dateCreated, priority, description);
 		SchoolClass = schoolClass;

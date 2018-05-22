@@ -1,45 +1,35 @@
 package application.File;
 
-import java.awt.List;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
-
 import application.Main;
 import classes.Book;
+import classes.Game;
 import classes.Movie;
-import classes.SchoolWork;
+import classes.Task;
 import classes.Series;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class addEntryVisualController {
 	String value = "NULL";
-	private Main main;
 	
 	@FXML private AnchorPane platformField;
-	@FXML private ComboBox platformBox;
+	@FXML private ComboBox<String> platformBox;
 	
 	String usedValue;
-	@FXML private ComboBox priorityBox;
+	@FXML private ComboBox<String> priorityBox;
 	ObservableList<String> priorityList = FXCollections.observableArrayList("High", "Medium", "Low");
 	
-	
+	@FXML private TextField genreField;
 	@FXML private TextField	classField;
 	@FXML private DatePicker	dateDueField;
 	@FXML private TextField	episodesField;
@@ -96,20 +86,27 @@ public class addEntryVisualController {
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
 				//render movie's extra values
-			}else if(platformBox.getValue().equals("SchoolWork")){
+			}else if(platformBox.getValue().equals("Task")){
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(Main.class.getResource("File/NewSchoolWork.fxml"));
+				loader.setLocation(Main.class.getResource("File/NewTask.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render schoolWork's extra values
+				//render Task's extra values
 			}else if(platformBox.getValue().equals("Series")) {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/NewSeries.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render Serie's exta values
+				//render Serie's extra values
+			}else if(platformBox.getValue().equals("Game")) {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(Main.class.getResource("File/NewGame.fxml"));
+				loader.setController(this);
+				AnchorPane ex = loader.load();
+				platformField.getChildren().setAll(ex.getChildren());
+				//render Serie's extra values
 			}
 			value = (String)platformBox.getValue();
 		}
@@ -135,11 +132,13 @@ public class addEntryVisualController {
 			//Movie(String name, Date dateCreated, int priority, String description, int length, Date dateReleased)
 			Date date = Date.from(dateReleasedField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Main.db.addEntry(new Movie(nameField.getText(), new Date(), priority, descriptionField.getText(), Integer.parseInt(lengthField.getText()),date));
-		}else if(platformBox.getValue().equals("SchoolWork")){
+		}else if(platformBox.getValue().equals("Task")){
 			Date date = Date.from(dateDueField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			Main.db.addEntry(new SchoolWork(nameField.getText(), new Date(), priority, descriptionField.getText(), classField.getText(),date));
+			Main.db.addEntry(new Task(nameField.getText(), new Date(), priority, descriptionField.getText(), classField.getText(),date));
 		}else if(platformBox.getValue().equals("Series")) {
 			Main.db.addEntry(new Series(nameField.getText(), new Date(), priority, descriptionField.getText(), Integer.parseInt(episodesField.getText()), Integer.parseInt(episodesFinishedField.getText())));
+		}else if(platformBox.getValue().equals("Game")) {
+			Main.db.addEntry(new Game(nameField.getText(), new Date(), priority, descriptionField.getText(), genreField.getText(), Integer.parseInt(lengthField.getText())));
 		}
 		System.out.println("WTF");
 		Main.closeSecondaryStage();
