@@ -4,13 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-
-import application.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -129,8 +124,9 @@ public class Database {
 	public void write() throws IOException {
 		try {
 		FileWriter writer = new FileWriter(name+".txt");
+		PrintWriter printWriter = new PrintWriter(writer);	
+		printWriter.println(name);
 		for(int c = 0; c  < platforms.size(); c++) {
-				PrintWriter printWriter = new PrintWriter(writer);	
 				printWriter.println(platformsInUse.get(c));
 				ArrayList<Platform> arr = platforms.get(c);
 				for(int x = 0; x < arr.size(); x++) {
@@ -153,10 +149,12 @@ public class Database {
 			}
 		}
 	public void parse(java.io.File file) {
+		System.out.println("We are here");
 		String line;
 		//The values of the array will be initialized as the pattern for parsing state above
 		String platform = "";
 		try(Scanner scan = new Scanner(file)){
+			name = scan.nextLine();
 			while(scan.hasNextLine()) {
 				boolean pass = false;
 				line = scan.nextLine();

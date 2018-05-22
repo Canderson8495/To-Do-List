@@ -1,57 +1,42 @@
 package application;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Scanner;
+
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import classes.Book;
 import classes.Database;
+import classes.Game;
+import classes.Movie;
 import classes.Platform;
-import javafx.application.Application;
+import classes.Series;
+import classes.Task;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderImage;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+
 
 public class Main extends Application {
 	public static Database db = new Database();
-	private static Stage primaryStage;
-	public static BorderPane mainVisual;
-	public static TabPane entryPane;
-	public static Stage secondaryStage;
+	private static Stage primaryStage = new Stage();
+	public static BorderPane mainVisual = new BorderPane();
+	public static TabPane entryPane = new TabPane();
+	public static Stage secondaryStage = new Stage();
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("To Do List");
+		loadConfig();
 		showMainVisual();
 
 	}
@@ -128,6 +113,24 @@ public class Main extends Application {
     		configPrintWriter.println(file.toString());
     		configPrintWriter.close();
     		showListVisual();
+    		db = new Database();
+        	System.out.println("WHERE IT IS");
+            db.parse(file);
+            showListVisual();
+        }
+	}
+	
+	public static void loadConfig() throws IOException {
+		//The values of the array will be initialized as the pattern for parsing state above
+		File file = new File("tmp");
+		java.io.File configFile = new java.io.File("src\\application\\config.txt");
+		try(Scanner scan = new Scanner(configFile)){
+			file = new File(scan.nextLine());
+		}catch(Exception error) {
+			System.out.println("Preloaded File not valid");
+		}
+		if (file != null) {
+			System.out.println(file.toString() + "????");
     		db = new Database();
         	System.out.println("WHERE IT IS");
             db.parse(file);
