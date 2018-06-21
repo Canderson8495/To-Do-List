@@ -18,6 +18,7 @@ public class Book extends Platform{
 		return super.toFile() + "|" + numPage + "|" + author;
 	}
 	
+	//Essentially like im subleasing the parsing functions to the classes.
 	public static Book read(String input) {
 		System.out.println("We're here");
 		ArrayList<String> values = new ArrayList<String>();
@@ -36,7 +37,7 @@ public class Book extends Platform{
 		return book;
 	}
 	
-
+	//Deprecated.
 	@Override
 	public Pane toFXVisual() {
 		return new Pane();

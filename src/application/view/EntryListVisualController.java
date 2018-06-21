@@ -65,26 +65,11 @@ public class EntryListVisualController {
 	//@FXML private VBox listVBox;
 	@FXML private TabPane tabPane;
 	@FXML private void initialize() throws IOException {
-		System.out.println("WORK");
-		//listVBox.getChildren().clear();
-		//ArrayList<ListView<Platform>> arr = new ArrayList<ListView<Platform>>();
 		tabPane.getTabs().clear();
 		for(int x = 0; x < Main.db.getPlatformsInUse().size(); x++) {
+			//Dynamically creates all the tab based upon whether or not they're in use.
 			tabPane.getTabs().add(new Tab(Main.db.getPlatformsInUse().get(x)));
 			tabPane.getTabs().get(x).setContent(Main.db.getTableVisual(Main.db.getPlatformsInUse().get(x)));
 		}
 	}
-
 }
-
-//listVBox.getChildren().add(new Label(Main.db.getPlatformsInUse().get(x)));
-//arr.add(Main.db.getListVisual(Main.db.getPlatformsInUse().get(x)));
-//System.out.println("Are they here");
-//listVBox.getChildren().add(arr.get(x));
-//arr.get(x).getSelectionModel().selectedItemProperty().addListener(
-//     new ChangeListener<Platform>() {
-//         public void changed(ObservableValue<? extends Platform> ov, 
-//            Platform old_val, Platform new_val) {
-//        	//Main.showEntryVisual(new_val);
-//         }
-//});

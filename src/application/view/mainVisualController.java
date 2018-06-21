@@ -42,4 +42,8 @@ public class mainVisualController {
 		Main.showOpenFileVisual();
 		//Open a file picker that will then allow the user to select the database
 	}
+	@FXML
+	private void goDelete() throws IOException{
+		Main.deleteEntry();
+	}
 }

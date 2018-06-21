@@ -46,6 +46,22 @@ public class Database {
 			platforms.get(platformsInUse.indexOf("Game")).add((Game)entry);
 		}
 	}
+	public void deleteEntry(Platform entry) {
+		if(entry instanceof Book) {
+			platforms.get(platformsInUse.indexOf("Book")).remove((Book)entry);
+		}else if(entry instanceof Movie) {
+			platforms.get(platformsInUse.indexOf("Movie")).remove((Movie)entry);
+		}else if(entry instanceof Task) {
+			platforms.get(platformsInUse.indexOf("Task")).remove((Task)entry);
+		}else if(entry instanceof Series) {
+			platforms.get(platformsInUse.indexOf("Series")).remove((Series)entry);
+		}else if(entry instanceof Game) {
+			platforms.get(platformsInUse.indexOf("Game")).remove((Game)entry);
+		}
+	}
+	public void deleteEntry(int index, int secondindex) {
+		platforms.get(index).remove(secondindex);
+	}
 	public ArrayList<Platform> getPlatformList(String platformName) {
 		return platforms.get(platformsInUse.indexOf(platformName));
 	}
@@ -117,10 +133,11 @@ public class Database {
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 		
 		tmp.setItems(obvList);
+		//I need to add the logic for adding more tables based on the platform, that's not difficult in itself, but I have to create more space for the categories.
 		tmp.getColumns().addAll(nameColumn,dateCreatedColumn, priorityColumn, descriptionColumn);
 		return tmp;
 	}
-	
+	//Add the another else if statement if another a new platform is added.
 	public void write() throws IOException {
 		try {
 		FileWriter writer = new FileWriter(name+".txt");
@@ -143,11 +160,11 @@ public class Database {
 					}
 				}
 		}
-				writer.close();
-			}catch(IOException error) {
-				System.out.println("ERROR" + error);
-			}
+			writer.close();
+		}catch(IOException error) {
+			System.out.println("ERROR" + error);
 		}
+	}
 	public void parse(java.io.File file) {
 		System.out.println("We are here");
 		String line;
@@ -205,14 +222,11 @@ public class Database {
 	
 	public Database() {
 		super();
-		System.out.println("IN THIS CONSTRUCTOR");
 		platformsAvailable.add("Book");
 		platformsAvailable.add("Movie");
 		platformsAvailable.add("Task");
 		platformsAvailable.add("Series");
 		platformsAvailable.add("Game");
-		System.out.println(platformsAvailable.size());
-		
 	}
 	public Database(String args[]) {
 		for(String e : args) {
