@@ -31,7 +31,12 @@ public class mainVisualController {
 	}
 	@FXML
 	private void goSave() throws IOException {
-		Main.db.write();
+		Main.showSaveFileVisual();
+	}
+	
+	@FXML
+	private void goSaveAs() throws IOException{
+		Main.showSaveAsFileVisual();
 	}
 	
 	@FXML

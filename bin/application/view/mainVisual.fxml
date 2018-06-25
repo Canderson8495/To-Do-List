@@ -23,6 +23,7 @@
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#goOpen" text="Open" />
                   <MenuItem mnemonicParsing="false" onAction="#goSave" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#goSaveAs" text="Save As..." />
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

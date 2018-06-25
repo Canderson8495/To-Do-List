@@ -1,4 +1,5 @@
 package classes;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,6 +30,9 @@ public class Database {
 			platforms.add(new ArrayList<Platform>());
 		}
 		this.name = name;
+	}
+	public String getName() {
+		return name;
 	}
 	public void addEntry(Platform entry) {
 		if(entry instanceof Book) {
@@ -163,6 +167,34 @@ public class Database {
 			System.out.println("ERROR" + error);
 		}
 	}
+	public void write(File file) throws IOException {
+		try {
+			System.out.println("Entered overloaded write function");
+		FileWriter writer = new FileWriter(file);
+		PrintWriter printWriter = new PrintWriter(writer);	
+		printWriter.println(name);
+		for(int c = 0; c  < platforms.size(); c++) {
+				printWriter.println(platformsInUse.get(c));
+				ArrayList<Platform> arr = platforms.get(c);
+				for(int x = 0; x < arr.size(); x++) {
+					if(arr.get(x) instanceof Book) {
+						printWriter.println(((Book)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Movie) {
+						printWriter.println(((Movie)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Task) {
+						printWriter.println(((Task)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Series) {
+						printWriter.println(((Series)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Game) {
+						printWriter.println(((Game)arr.get(x)).toFile());
+					}
+				}
+		}
+			writer.close();
+		}catch(IOException error) {
+			System.out.println("ERROR" + error);
+		}
+	}
 	public void parse(java.io.File file) {
 		String line;
 		//The values of the array will be initialized as the pattern for parsing state above
@@ -205,10 +237,8 @@ public class Database {
 			}
 		}catch(FileNotFoundException error) {
 			System.out.println("The file doesn't exist|"+error);
-			System.exit(0);
 		}catch(NumberFormatException error) {
 			System.out.println("There is an issue w/ the file setup |" + error);
-			System.exit(0);
 		}
 	}
 

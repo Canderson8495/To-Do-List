@@ -24,6 +24,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -50,8 +52,11 @@ public class Main extends Application {
 		//Loads the last used database.
 		loadConfig();
 		showMainVisual();
+		File file = new File("resources\\icon.png");
+		Image image = new Image(file.toURI().toString());
+		ImageView img = new ImageView(image);
+		primaryStage.getIcons().add(image);
 		primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-
 	        public void handle(KeyEvent ke) {
 	            if (ke.getCode() == KeyCode.DELETE) {
 	               try {
@@ -63,6 +68,7 @@ public class Main extends Application {
 	            }
 	        }
 	    });
+		
 	}
 	
 	//Loads Menu and tab Panes
@@ -120,15 +126,16 @@ public class Main extends Application {
 
 	public static void showOpenFileVisual() throws IOException {
 		FileChooser FC = new FileChooser();
+		File initialPath = new File(System.getProperty("user.home") + "/Documents");
+		FC.setInitialDirectory(initialPath);
+		FC.getExtensionFilters().add(new FileChooser.ExtensionFilter(".txt", "*.txt"));
 		File file = FC.showOpenDialog(secondaryStage);
         if (file != null) {
         	//Writes to the config with the last loaded file.
-        	FileWriter configWriter = new FileWriter("src\\application\\config.txt");
+        	FileWriter configWriter = new FileWriter(System.getProperty("user.home") + "/Documents/config.txt");
     		PrintWriter configPrintWriter = new PrintWriter(configWriter);
     		configPrintWriter.println(file.toString());
     		configPrintWriter.close();
-    		
-    		//POSSIBLY NOT NEEDED
     		showListVisual();
     		db = new Database();
             db.parse(file);
@@ -136,20 +143,51 @@ public class Main extends Application {
         }
 	}
 	
-	public static void loadConfig() throws IOException {
-		//The values of the array will be initialized as the pattern for parsing state above
+	public static void showSaveFileVisual() throws IOException{
 		File file = new File("tmp");
-		java.io.File configFile = new java.io.File("src\\application\\config.txt");
+		java.io.File configFile = new java.io.File(System.getProperty("user.home") + "/Documents/config.txt");
 		try(Scanner scan = new Scanner(configFile)){
 			file = new File(scan.nextLine());
+			if (file != null) {
+	            db.write(file);
+	            showListVisual();
+	        }
 		}catch(Exception error) {
 			System.out.println("Preloaded File not valid");
 		}
-		if (file != null) {
-    		db = new Database();
-            db.parse(file);
-            showListVisual();
+	}
+	
+	public static void showSaveAsFileVisual() throws IOException {
+		FileChooser FC = new FileChooser();
+		FC.setInitialFileName(db.getName());
+		File initialPath = new File(System.getProperty("user.home") + "/Documents");
+		FC.setInitialDirectory(initialPath);
+		FC.getExtensionFilters().add(new FileChooser.ExtensionFilter(".txt", "*.txt"));
+		File file = FC.showSaveDialog(secondaryStage);
+        if (file != null) {
+        	//Writes to the config with the last loaded file.
+        	FileWriter configWriter = new FileWriter(System.getProperty("user.home") + "/Documents/config.txt");
+    		PrintWriter configPrintWriter = new PrintWriter(configWriter);
+    		configPrintWriter.println(file.toString());
+    		configPrintWriter.close();
+            db.write(file);
         }
+	}
+	
+	public static void loadConfig() throws IOException {
+		//The values of the array will be initialized as the pattern for parsing state above
+		File file = new File("tmp");
+		java.io.File configFile = new java.io.File(System.getProperty("user.home") + "/Documents/config.txt");
+		try(Scanner scan = new Scanner(configFile)){
+			file = new File(scan.nextLine());
+			if (file != null) {
+	    		db = new Database();
+	            db.parse(file);
+	            showListVisual();
+	        }
+		}catch(Exception error) {
+			System.out.println("Preloaded File not valid");
+		}
 	} 
 	
 	public static void deleteEntry() throws IOException{
