@@ -1,4 +1,5 @@
 package classes;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,13 +27,14 @@ public class Database {
 		this();
 		this.platformsInUse = platformsToBeUsed;
 		for(int x = 0; x < platformsInUse.size(); x++) {
-			System.out.println(x + "Platforms");
 			platforms.add(new ArrayList<Platform>());
 		}
 		this.name = name;
 	}
+	public String getName() {
+		return name;
+	}
 	public void addEntry(Platform entry) {
-		System.out.println("ADDING ENTRY");
 		if(entry instanceof Book) {
 			platforms.get(platformsInUse.indexOf("Book")).add((Book)entry);
 			System.out.println(entry);
@@ -45,6 +47,22 @@ public class Database {
 		}else if(entry instanceof Game) {
 			platforms.get(platformsInUse.indexOf("Game")).add((Game)entry);
 		}
+	}
+	public void deleteEntry(Platform entry) {
+		if(entry instanceof Book) {
+			platforms.get(platformsInUse.indexOf("Book")).remove((Book)entry);
+		}else if(entry instanceof Movie) {
+			platforms.get(platformsInUse.indexOf("Movie")).remove((Movie)entry);
+		}else if(entry instanceof Task) {
+			platforms.get(platformsInUse.indexOf("Task")).remove((Task)entry);
+		}else if(entry instanceof Series) {
+			platforms.get(platformsInUse.indexOf("Series")).remove((Series)entry);
+		}else if(entry instanceof Game) {
+			platforms.get(platformsInUse.indexOf("Game")).remove((Game)entry);
+		}
+	}
+	public void deleteEntry(int index, int secondindex) {
+		platforms.get(index).remove(secondindex);
 	}
 	public ArrayList<Platform> getPlatformList(String platformName) {
 		return platforms.get(platformsInUse.indexOf(platformName));
@@ -117,10 +135,11 @@ public class Database {
 		descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 		
 		tmp.setItems(obvList);
+		//I need to add the logic for adding more tables based on the platform, that's not difficult in itself, but I have to create more space for the categories.
 		tmp.getColumns().addAll(nameColumn,dateCreatedColumn, priorityColumn, descriptionColumn);
 		return tmp;
 	}
-	
+	//Add the another else if statement if another a new platform is added.
 	public void write() throws IOException {
 		try {
 		FileWriter writer = new FileWriter(name+".txt");
@@ -143,13 +162,40 @@ public class Database {
 					}
 				}
 		}
-				writer.close();
-			}catch(IOException error) {
-				System.out.println("ERROR" + error);
-			}
+			writer.close();
+		}catch(IOException error) {
+			System.out.println("ERROR" + error);
 		}
+	}
+	public void write(File file) throws IOException {
+		try {
+			System.out.println("Entered overloaded write function");
+		FileWriter writer = new FileWriter(file);
+		PrintWriter printWriter = new PrintWriter(writer);	
+		printWriter.println(name);
+		for(int c = 0; c  < platforms.size(); c++) {
+				printWriter.println(platformsInUse.get(c));
+				ArrayList<Platform> arr = platforms.get(c);
+				for(int x = 0; x < arr.size(); x++) {
+					if(arr.get(x) instanceof Book) {
+						printWriter.println(((Book)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Movie) {
+						printWriter.println(((Movie)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Task) {
+						printWriter.println(((Task)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Series) {
+						printWriter.println(((Series)arr.get(x)).toFile());
+					}else if(arr.get(x) instanceof Game) {
+						printWriter.println(((Game)arr.get(x)).toFile());
+					}
+				}
+		}
+			writer.close();
+		}catch(IOException error) {
+			System.out.println("ERROR" + error);
+		}
+	}
 	public void parse(java.io.File file) {
-		System.out.println("We are here");
 		String line;
 		//The values of the array will be initialized as the pattern for parsing state above
 		String platform = "";
@@ -159,9 +205,7 @@ public class Database {
 				boolean pass = false;
 				line = scan.nextLine();
 				for(int x = 0; x < platformsAvailable.size();x++) {
-					System.out.println("WHERE THE FUCK IS THIS");
 					if(line.equals(platformsAvailable.get(x))) {
-						System.out.println("SHIT");
 						platformsInUse.add(line);
 						System.out.println(line);
 						platforms.add(new ArrayList<Platform>());
@@ -189,30 +233,23 @@ public class Database {
 				}catch(Exception e){
 					System.out.println("ERROR" + e);
 				}
-				
-				System.out.println("Finished parsing");
 				//Loading a Person object and throwing it into a arrayList that is to be returned.
 			}
 		}catch(FileNotFoundException error) {
 			System.out.println("The file doesn't exist|"+error);
-			System.exit(0);
 		}catch(NumberFormatException error) {
 			System.out.println("There is an issue w/ the file setup |" + error);
-			System.exit(0);
 		}
 	}
 
 	
 	public Database() {
 		super();
-		System.out.println("IN THIS CONSTRUCTOR");
 		platformsAvailable.add("Book");
 		platformsAvailable.add("Movie");
 		platformsAvailable.add("Task");
 		platformsAvailable.add("Series");
 		platformsAvailable.add("Game");
-		System.out.println(platformsAvailable.size());
-		
 	}
 	public Database(String args[]) {
 		for(String e : args) {

@@ -40,7 +40,5 @@ public class newDatabaseVisualController {
 		Main.db = new Database(platformsChecked, nameField.getText());
 		Main.closeSecondaryStage();
 		Main.showListVisual();
-		//Close the window here
-		
 	}
 }

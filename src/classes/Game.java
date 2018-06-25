@@ -15,7 +15,6 @@ public class Game extends Platform{
 	}
 	
 	public static Game read(String input) {
-		System.out.println("We're here");
 		ArrayList<String> values = new ArrayList<String>();
 		StringBuffer str = new StringBuffer("");
 		for(int x = 0; x < input.length(); x++) {
@@ -28,7 +27,6 @@ public class Game extends Platform{
 		}
 		values.add(str.toString());
 		Game Game = new Game(values.get(0), new Date(Long.parseLong(values.get(1))), Integer.parseInt(values.get(2)),values.get(3),values.get(4), Integer.parseInt(values.get(5)));
-			System.out.println(Game);
 		return Game;
 	}
 	

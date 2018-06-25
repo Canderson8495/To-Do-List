@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,25 +23,55 @@ import classes.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Modality;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 
 
 public class Main extends Application {
+	//A database will be loaded whenever the program is loaded.
 	public static Database db = new Database();
+	//The main window will show our database.
 	private static Stage primaryStage = new Stage();
+	//This is the pane that occupies the primaryStage
 	public static BorderPane mainVisual = new BorderPane();
+	//this holds the table of all of our entries
 	public static TabPane entryPane = new TabPane();
+	//THis window is used for the windows with the add and shit.
 	public static Stage secondaryStage = new Stage();
 
+	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("To Do List");
+		//Reads from config file, and inputs the settings to the program.
+		//Loads the last used database.
 		loadConfig();
 		showMainVisual();
-
+		File file = new File("resources\\icon.png");
+		Image image = new Image(file.toURI().toString());
+		ImageView img = new ImageView(image);
+		primaryStage.getIcons().add(image);
+		primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+	        public void handle(KeyEvent ke) {
+	            if (ke.getCode() == KeyCode.DELETE) {
+	               try {
+					deleteEntry();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            }
+	        }
+	    });
+		
 	}
-
+	
+	//Loads Menu and tab Panes
 	private void showMainVisual() throws IOException {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("view/mainVisual.fxml"));
@@ -51,10 +82,13 @@ public class Main extends Application {
 		showListVisual();
 	}
 
-	
-	//Deprecating
-	public static void showEntryVisual(Platform entry){
-		mainVisual.setLeft(entry.toFXVisual());
+	//Might just make this into a table view, each tab pane representing a different table which represents a different platorm
+	public static void showListVisual() throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(Main.class.getResource("view/EntryList.fxml"));
+		//When loading the EntryList FXML file, the controller is called. When the controller is called, the initializer loads the database.
+		entryPane = loader.load();
+		mainVisual.setCenter(entryPane);
 	}
 
 	public static void showAddVisual() throws IOException {
@@ -68,7 +102,6 @@ public class Main extends Application {
 		Scene scene = new Scene(addVisual);
 		secondaryStage.setScene(scene);
 		secondaryStage.show();
-
 	}
 
 	public static void showNewDatabaseVisual() throws IOException {
@@ -83,59 +116,86 @@ public class Main extends Application {
 		secondaryStage.setScene(scene);
 		secondaryStage.show();
 	}
-
+	
+	//Terminates the next stage, and reloads the list visual
 	public static void closeSecondaryStage() throws IOException {
 		secondaryStage.close();
 		showListVisual();
 	}
 
-	
-	//Might just make this into a table view, each tab pane representing a different table which represents a different platorm
-	public static void showListVisual() throws IOException {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(Main.class.getResource("view/EntryList.fxml"));
-		entryPane = loader.load();
-		mainVisual.setCenter(entryPane);
-		//Probably going to have to make this fxml with its own controller
-		
-	}
-	
-	public static void showTabVisual() {
-		
-	}
-	
+
 	public static void showOpenFileVisual() throws IOException {
 		FileChooser FC = new FileChooser();
+		File initialPath = new File(System.getProperty("user.home") + "/Documents");
+		FC.setInitialDirectory(initialPath);
+		FC.getExtensionFilters().add(new FileChooser.ExtensionFilter(".txt", "*.txt"));
 		File file = FC.showOpenDialog(secondaryStage);
         if (file != null) {
-        	FileWriter configWriter = new FileWriter("src\\application\\config.txt");
+        	//Writes to the config with the last loaded file.
+        	FileWriter configWriter = new FileWriter(System.getProperty("user.home") + "/Documents/config.txt");
     		PrintWriter configPrintWriter = new PrintWriter(configWriter);
     		configPrintWriter.println(file.toString());
     		configPrintWriter.close();
     		showListVisual();
     		db = new Database();
-        	System.out.println("WHERE IT IS");
             db.parse(file);
             showListVisual();
+        }
+	}
+	
+	public static void showSaveFileVisual() throws IOException{
+		File file = new File("tmp");
+		java.io.File configFile = new java.io.File(System.getProperty("user.home") + "/Documents/config.txt");
+		try(Scanner scan = new Scanner(configFile)){
+			file = new File(scan.nextLine());
+			if (file != null) {
+	            db.write(file);
+	            showListVisual();
+	        }
+		}catch(Exception error) {
+			System.out.println("Preloaded File not valid");
+		}
+	}
+	
+	public static void showSaveAsFileVisual() throws IOException {
+		FileChooser FC = new FileChooser();
+		FC.setInitialFileName(db.getName());
+		File initialPath = new File(System.getProperty("user.home") + "/Documents");
+		FC.setInitialDirectory(initialPath);
+		FC.getExtensionFilters().add(new FileChooser.ExtensionFilter(".txt", "*.txt"));
+		File file = FC.showSaveDialog(secondaryStage);
+        if (file != null) {
+        	//Writes to the config with the last loaded file.
+        	FileWriter configWriter = new FileWriter(System.getProperty("user.home") + "/Documents/config.txt");
+    		PrintWriter configPrintWriter = new PrintWriter(configWriter);
+    		configPrintWriter.println(file.toString());
+    		configPrintWriter.close();
+            db.write(file);
         }
 	}
 	
 	public static void loadConfig() throws IOException {
 		//The values of the array will be initialized as the pattern for parsing state above
 		File file = new File("tmp");
-		java.io.File configFile = new java.io.File("src\\application\\config.txt");
+		java.io.File configFile = new java.io.File(System.getProperty("user.home") + "/Documents/config.txt");
 		try(Scanner scan = new Scanner(configFile)){
 			file = new File(scan.nextLine());
+			if (file != null) {
+	    		db = new Database();
+	            db.parse(file);
+	            showListVisual();
+	        }
 		}catch(Exception error) {
 			System.out.println("Preloaded File not valid");
 		}
-		if (file != null) {
-			System.out.println(file.toString() + "????");
-    		db = new Database();
-        	System.out.println("WHERE IT IS");
-            db.parse(file);
-            showListVisual();
-        }
+	} 
+	
+	public static void deleteEntry() throws IOException{
+		TableView table = (TableView)entryPane.getSelectionModel().getSelectedItem().getContent();
+		for(int x = 0; x < table.getSelectionModel().getSelectedIndices().size(); x++) {
+			db.deleteEntry(entryPane.getSelectionModel().getSelectedIndex(), (int)table.getSelectionModel().getSelectedIndices().get(x));
+		}
+		showListVisual();
 	}
 	
 	public static void main(String[] args) {

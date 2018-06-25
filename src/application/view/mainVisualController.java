@@ -17,29 +17,34 @@ public class mainVisualController {
 
 	@FXML
 	private static AnchorPane entryPane;
-	private Main main;
 	
 	@FXML 
 	private void initialize() {
 	}
 	@FXML
 	private void goAddVisual() throws IOException {
-		System.out.println("We're here");
-		main.showAddVisual();
+		Main.showAddVisual();
 	}
 	@FXML
 	private void goNewDatabaseVisual() throws IOException {
-		System.out.println("We're here");
-		main.showNewDatabaseVisual();
+		Main.showNewDatabaseVisual();
 	}
 	@FXML
 	private void goSave() throws IOException {
-		Main.db.write();
+		Main.showSaveFileVisual();
+	}
+	
+	@FXML
+	private void goSaveAs() throws IOException{
+		Main.showSaveAsFileVisual();
 	}
 	
 	@FXML
 	private void goOpen() throws IOException{
 		Main.showOpenFileVisual();
-		//Open a file picker that will then allow the user to select the database
+	}
+	@FXML
+	private void goDelete() throws IOException{
+		Main.deleteEntry();
 	}
 }

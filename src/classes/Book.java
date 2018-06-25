@@ -18,8 +18,8 @@ public class Book extends Platform{
 		return super.toFile() + "|" + numPage + "|" + author;
 	}
 	
+	//Essentially like im subleasing the parsing functions to the classes.
 	public static Book read(String input) {
-		System.out.println("We're here");
 		ArrayList<String> values = new ArrayList<String>();
 		StringBuffer str = new StringBuffer("");
 		for(int x = 0; x < input.length(); x++) {
@@ -32,11 +32,10 @@ public class Book extends Platform{
 		}
 		values.add(str.toString());
 		Book book = new Book(values.get(0), new Date(Long.parseLong(values.get(1))), Integer.parseInt(values.get(2)), values.get(3), Integer.parseInt(values.get(4)), values.get(5));
-			System.out.println(book);
 		return book;
 	}
 	
-
+	//Deprecated.
 	@Override
 	public Pane toFXVisual() {
 		return new Pane();
