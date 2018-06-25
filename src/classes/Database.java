@@ -26,13 +26,11 @@ public class Database {
 		this();
 		this.platformsInUse = platformsToBeUsed;
 		for(int x = 0; x < platformsInUse.size(); x++) {
-			System.out.println(x + "Platforms");
 			platforms.add(new ArrayList<Platform>());
 		}
 		this.name = name;
 	}
 	public void addEntry(Platform entry) {
-		System.out.println("ADDING ENTRY");
 		if(entry instanceof Book) {
 			platforms.get(platformsInUse.indexOf("Book")).add((Book)entry);
 			System.out.println(entry);
@@ -166,7 +164,6 @@ public class Database {
 		}
 	}
 	public void parse(java.io.File file) {
-		System.out.println("We are here");
 		String line;
 		//The values of the array will be initialized as the pattern for parsing state above
 		String platform = "";
@@ -176,9 +173,7 @@ public class Database {
 				boolean pass = false;
 				line = scan.nextLine();
 				for(int x = 0; x < platformsAvailable.size();x++) {
-					System.out.println("WHERE THE FUCK IS THIS");
 					if(line.equals(platformsAvailable.get(x))) {
-						System.out.println("SHIT");
 						platformsInUse.add(line);
 						System.out.println(line);
 						platforms.add(new ArrayList<Platform>());
@@ -206,8 +201,6 @@ public class Database {
 				}catch(Exception e){
 					System.out.println("ERROR" + e);
 				}
-				
-				System.out.println("Finished parsing");
 				//Loading a Person object and throwing it into a arrayList that is to be returned.
 			}
 		}catch(FileNotFoundException error) {

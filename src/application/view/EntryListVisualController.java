@@ -61,13 +61,12 @@ import javafx.stage.Stage;
 import javafx.scene.image.*;
 
 public class EntryListVisualController {
-	
-	//@FXML private VBox listVBox;
 	@FXML private TabPane tabPane;
 	@FXML private void initialize() throws IOException {
 		tabPane.getTabs().clear();
+
+		//Dynamically creates all the tab based upon whether or not they're in use.
 		for(int x = 0; x < Main.db.getPlatformsInUse().size(); x++) {
-			//Dynamically creates all the tab based upon whether or not they're in use.
 			tabPane.getTabs().add(new Tab(Main.db.getPlatformsInUse().get(x)));
 			tabPane.getTabs().get(x).setContent(Main.db.getTableVisual(Main.db.getPlatformsInUse().get(x)));
 		}

@@ -43,7 +43,6 @@ public class addEntryVisualController {
 	
 	@FXML
 	private void initialize() {
-		System.out.println("CALLED");
 		ObservableList<String> platformList = FXCollections.observableArrayList();
 		ArrayList<String> tmp = Main.db.getPlatformsInUse();
 		for(int x = 0; x < tmp.size(); x++) {
@@ -64,49 +63,40 @@ public class addEntryVisualController {
 	}
 	
 	@FXML private void renderPlatformInfo() throws IOException {
+		//This condition below will prevent a reset of inputed fields when switching between tabs.
 		if(value != platformBox.getValue()) {
+			//Rendering platform information
 			System.out.println("Rendering platform information");
-			//Add a condition to not reset if platform's value was not changed.
-			//Let's make the controller this file also
-			System.out.println("We're heressfsdf");
 			if(platformBox.getValue().equals("Book")) {
-				System.out.println("We're here");
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/NewBook.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//THIS IS FUCKING IT^^^^^^^^^^^^^^^
-				System.out.println("We're here");
-				//render book's extra values
 			}else if(platformBox.getValue().equals("Movie")){
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/newMovie.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render movie's extra values
 			}else if(platformBox.getValue().equals("Task")){
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/NewTask.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render Task's extra values
 			}else if(platformBox.getValue().equals("Series")) {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/NewSeries.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render Serie's extra values
 			}else if(platformBox.getValue().equals("Game")) {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Main.class.getResource("File/NewGame.fxml"));
 				loader.setController(this);
 				AnchorPane ex = loader.load();
 				platformField.getChildren().setAll(ex.getChildren());
-				//render Serie's extra values
 			}
 			value = (String)platformBox.getValue();
 		}
@@ -122,14 +112,11 @@ public class addEntryVisualController {
 		}else {
 			priority = 1;
 		}
-		//Can i just pass in the entry manually, like a book object, and make everything the function with platform.
+		//Just pass in the entry manually, like a book object, and make everything the function with platform.
 		if(platformBox.getValue().equals("Book")) {
-			//public Book(String name, Date dateCreated, int priority, String description, int numPage, String author)
-			//Look at using constants for this
 			Book book = new Book(nameField.getText(), new Date(), priority, descriptionField.getText(), Integer.parseInt(pageNumField.getText()), authorField.getText() );
 			Main.db.addEntry(book);
 		}else if(platformBox.getValue().equals("Movie")){
-			//Movie(String name, Date dateCreated, int priority, String description, int length, Date dateReleased)
 			Date date = Date.from(dateReleasedField.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Main.db.addEntry(new Movie(nameField.getText(), new Date(), priority, descriptionField.getText(), Integer.parseInt(lengthField.getText()),date));
 		}else if(platformBox.getValue().equals("Task")){
@@ -140,7 +127,6 @@ public class addEntryVisualController {
 		}else if(platformBox.getValue().equals("Game")) {
 			Main.db.addEntry(new Game(nameField.getText(), new Date(), priority, descriptionField.getText(), genreField.getText(), Integer.parseInt(lengthField.getText())));
 		}
-		System.out.println("WTF");
 		Main.closeSecondaryStage();
 	}
 }

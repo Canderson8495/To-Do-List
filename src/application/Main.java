@@ -146,9 +146,7 @@ public class Main extends Application {
 			System.out.println("Preloaded File not valid");
 		}
 		if (file != null) {
-			System.out.println(file.toString() + "????");
     		db = new Database();
-        	System.out.println("WHERE IT IS");
             db.parse(file);
             showListVisual();
         }
